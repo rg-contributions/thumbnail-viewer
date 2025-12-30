@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // By default, the images will be rendered in the middle of the screen, but
   // you can add an offset to shift it vertically using this value
-  var topOffset = 0.8;
+  var topOffset = 1.0;
 
   // Finding elements with the class thumbnail-viewer
   var els = document.getElementsByClassName('thumbnail-viewer');
@@ -82,12 +82,13 @@ document.addEventListener("DOMContentLoaded", function() {
     var overall = getOverall();
     var figure  = getFigure();
     var image   = getImage(url, alt);
+    var caption = getCaption(url);
     var close   = getClose();
     var prev    = getPrev(index);
     var next    = getNext(index);
 
     function reStyle() {
-      style(overall, figure, image, close, prev, next);
+      style(overall, figure, image, caption, close, prev, next);
     }
 
     // We mount the elements one inside the other, set their
@@ -96,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // that are being displayed (if any), put the new figure
     // in the list of visible elements, style it, and then
     // make it visible
-    mount(overall, figure, image, close, prev, next);
+    mount(overall, figure, image, caption, close, prev, next);
     hide(overall);
     document.body.appendChild(overall);
     
@@ -158,6 +159,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   /**
+   * Builds the <figcaption> element
+   * @param {String} url
+   * @returns {Element}
+   */
+  function getCaption(url) {
+    const e = document.createElement('figcaption');
+    e.className = 'thumbnail-viewer-caption';
+    // Extract filename from URL
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+    e.innerHTML = filename;
+    return e;
+  }
+
+
+  /**
    * Builds the <a> element for closing
    * @returns {Element}
    */
@@ -208,9 +224,10 @@ document.addEventListener("DOMContentLoaded", function() {
   /**
    * Mounts the elements
    */
-  function mount(overall, figure, image, close, prev, next) {
+  function mount(overall, figure, image, caption, close, prev, next) {
     overall.appendChild(figure);
     figure.appendChild(image);
+    figure.appendChild(caption);
     figure.appendChild(close);
     if (prev) overall.appendChild(prev);
     if (next) overall.appendChild(next);
@@ -220,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function() {
   /**
    * Applies the essential styles to the elements
    */
-  function style(overall, figure, image, close, prev, next) {
+  function style(overall, figure, image, caption, close, prev, next) {
     // Getting the current width and height of the browser
     var clientWidth  = window.innerWidth;
     var clientHeight = window.innerHeight;
@@ -257,10 +274,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     clientImageWidth  = image.clientWidth;
     clientImageHeight = image.clientHeight;
+    var captionHeight = caption.clientHeight;
 
     // Styling figure
     //-------------------------------------------------------------------------
-    var figureTopPosition = ((clientHeight - clientImageHeight) / 2)
+    var figureTopPosition = ((clientHeight - (clientImageHeight + captionHeight)) / 2)
                           * topOffset;
 
     var figureLeftPosition = ((clientWidth - clientImageWidth) / 2);
@@ -281,6 +299,14 @@ document.addEventListener("DOMContentLoaded", function() {
     close.style.position = 'absolute';
     close.style.top = 0;
     close.style.right = 0;
+
+    // Styling caption
+    //-------------------------------------------------------------------------
+    caption.style.textAlign = 'center';
+    caption.style.width = '100%';
+    caption.style.padding = '10px 0';
+    caption.style.color = '#fff';
+    caption.style.backgroundColor = 'rgba(0,0,0,0.5)';
 
     // Styling prev/next buttons
     //-------------------------------------------------------------------------
