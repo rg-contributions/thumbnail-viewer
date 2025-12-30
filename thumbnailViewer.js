@@ -31,6 +31,59 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Finding elements with the class thumbnail-viewer
   var els = document.getElementsByClassName('thumbnail-viewer');
+  var dirs = document.getElementsByClassName('directory-viewer');
+
+  function addLabel(element, name) {
+    var label = document.createElement('div');
+    label.className = 'thumbnail-viewer-label';
+    label.innerHTML = name;
+    label.style.textAlign = 'center';
+    label.style.fontSize = '12px';
+    label.style.marginTop = '5px';
+    label.style.wordBreak = 'break-all';
+    label.style.color = 'inherit';
+
+    element.style.display = 'inline-block';
+    element.style.verticalAlign = 'top';
+    element.style.textDecoration = 'none';
+
+    element.appendChild(label);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var e = els[i];
+
+    var labelName = '';
+    var containedImages = e.getElementsByTagName('img');
+    if (containedImages.length > 0 && containedImages[0].alt) {
+      labelName = containedImages[0].alt;
+    } else {
+      var url = e.getAttribute('href');
+      if (url) {
+        var cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+        labelName = decodeURIComponent(cleanUrl.substring(cleanUrl.lastIndexOf('/') + 1));
+      }
+    }
+    
+    if (labelName) {
+      addLabel(e, labelName);
+    }
+
+    (function (element, index) {
+      element.addEventListener('click', function (event) {
+        event.preventDefault();
+        display(index);
+      });
+    })(e, i);
+  }
+
+  for (var j = 0; j < dirs.length; j++) {
+    var d = dirs[j];
+    var dirName = d.getAttribute('data-name');
+    if (dirName) {
+      addLabel(d, dirName);
+    }
+  }
 
   // Keeping a list of the elements that are visible
   var activeElements = [];
@@ -52,19 +105,6 @@ document.addEventListener("DOMContentLoaded", function() {
     return;
   }
 
-  for (var i = 0; i < els.length; i++) {
-    var e = els[i];
-
-    // Supressing the default events (in case of links, the redirection)
-    // and displaying the image
-    (function (element, index) {
-      element.addEventListener('click', function (event) {
-        event.preventDefault();
-        display(index);
-      });
-    })(e, i);
-  }
-
 
   /**
    * Displays the thumbnail
@@ -82,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var overall = getOverall();
     var figure  = getFigure();
     var image   = getImage(url, alt);
-    var caption = getCaption(url);
+    var caption = getCaption(url, alt);
     var close   = getClose();
     var prev    = getPrev(index);
     var next    = getNext(index);
@@ -161,14 +201,20 @@ document.addEventListener("DOMContentLoaded", function() {
   /**
    * Builds the <figcaption> element
    * @param {String} url
+   * @param {String} (alt)
    * @returns {Element}
    */
-  function getCaption(url) {
+  function getCaption(url, alt) {
     const e = document.createElement('figcaption');
     e.className = 'thumbnail-viewer-caption';
-    // Extract filename from URL
-    const filename = url.substring(url.lastIndexOf('/') + 1);
-    e.innerHTML = filename;
+    
+    if (alt) {
+      e.innerHTML = alt;
+    } else {
+      // Extract filename from URL as fallback
+      const filename = decodeURIComponent(url.substring(url.lastIndexOf('/') + 1));
+      e.innerHTML = filename;
+    }
     return e;
   }
 
