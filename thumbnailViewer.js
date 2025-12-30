@@ -258,6 +258,9 @@ document.addEventListener("DOMContentLoaded", function() {
     overall.style.top      = 0;
     overall.style.left     = 0;
     overall.style.width    = '100%';
+    overall.style.display  = 'flex';
+    overall.style.justifyContent = 'center';
+    overall.style.alignItems = 'center';
    
      // Styling image
     //-------------------------------------------------------------------------
@@ -274,25 +277,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     clientImageWidth  = image.clientWidth;
     clientImageHeight = image.clientHeight;
-    var captionHeight = caption.clientHeight;
 
     // Styling figure
     //-------------------------------------------------------------------------
-    var figureTopPosition = ((clientHeight - (clientImageHeight + captionHeight)) / 2)
-                          * topOffset;
-
-    var figureLeftPosition = ((clientWidth - clientImageWidth) / 2);
-
-    if (!isNaN(figureTopPosition)) {
-      figure.style.top = figureTopPosition + 'px';
-    }
-
-    if (!isNaN(figureLeftPosition)) {
-      figure.style.left = figureLeftPosition + 'px';      
-    }
-
-    figure.style.position = 'fixed';
     figure.style.margin = 0;
+    figure.style.position = 'relative'; // Relative to flex container
+    
+    // Apply topOffset if it's not 1.0
+    if (topOffset !== 1.0) {
+      var verticalShift = (clientHeight / 2) * (topOffset - 1.0);
+      figure.style.top = verticalShift + 'px';
+    }
 
     // Styling close button
     //-------------------------------------------------------------------------
