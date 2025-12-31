@@ -37,11 +37,6 @@ document.addEventListener("DOMContentLoaded", function() {
     var label = document.createElement('div');
     label.className = 'thumbnail-viewer-label';
     label.innerHTML = name;
-    label.style.textAlign = 'center';
-    label.style.fontSize = '12px';
-    label.style.marginTop = '5px';
-    label.style.wordBreak = 'break-all';
-    label.style.color = 'inherit';
 
     element.style.display = 'inline-block';
     element.style.verticalAlign = 'top';
@@ -343,11 +338,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Styling caption
     //-------------------------------------------------------------------------
-    caption.style.textAlign = 'center';
-    caption.style.width = '100%';
-    caption.style.padding = '10px 0';
-    caption.style.color = '#fff';
-    caption.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    // Styled in CSS
 
     // Styling prev/next buttons
     //-------------------------------------------------------------------------

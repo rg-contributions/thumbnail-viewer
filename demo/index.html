@@ -2,9 +2,18 @@
 	<head>
 		<title>Thumbnail Viewer Demo</title>
 		<script src="../thumbnailViewer.js"></script>
-		<link rel="stylesheet" href="css.css" />
+		<link rel="stylesheet" href="light.css" id="theme-link" />
 	</head>
 	<body>
+		<div style="padding: 10px;">
+			<button onclick="changeTheme('light.css')">Light Mode</button>
+			<button onclick="changeTheme('dark.css')">Dark Mode</button>
+		</div>
+		<script>
+			function changeTheme(theme) {
+				document.getElementById('theme-link').href = theme;
+			}
+		</script>
 		<a href="img/1.jpg" class="thumbnail-viewer">
 			<img class="thumbnail" src="img/1.jpg" alt="Jumeirah Lake Towers">
 		</a>
