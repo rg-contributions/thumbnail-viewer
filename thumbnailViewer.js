@@ -40,6 +40,25 @@ document.addEventListener("DOMContentLoaded", function() {
     var label = document.createElement('div');
     label.className = 'thumbnail-viewer-label';
     label.innerHTML = name;
+    label.title = name; // Show full name on hover
+
+    label.style.textAlign = 'center';
+    label.style.fontSize = '12px';
+    label.style.marginTop = '5px';
+    label.style.wordBreak = 'break-all';
+    label.style.color = 'inherit';
+
+    var truncateNames = (typeof window.truncate_names !== 'undefined') ? window.truncate_names : false;
+    if (truncateNames) {
+      label.style.overflow = 'hidden';
+      label.style.textOverflow = 'ellipsis';
+      label.style.whiteSpace = 'nowrap';
+      label.style.display = 'block';
+      label.style.maxWidth = '100px'; // Typical thumbnail width
+      label.style.margin = '5px auto 0 auto';
+    } else {
+      label.style.display = 'block'; // Keep centered
+    }
 
     element.style.display = 'inline-block';
     element.style.verticalAlign = 'top';
