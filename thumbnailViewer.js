@@ -211,6 +211,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function handleWheel(event) {
+      if (event.ctrlKey) return;
+      
       event.preventDefault();
       if (event.deltaY > 0) {
         // Wheel down -> Previous
@@ -386,6 +388,12 @@ document.addEventListener("DOMContentLoaded", function() {
     var clientImageWidth;
     var clientImageHeight;
 
+    // Browser zoom level
+    // We strictly use devicePixelRatio to detect standard browser zoom (Ctrl+/-).
+    // This ensures elements stay constant in physical pixels.
+    var zoom = window.devicePixelRatio || 1;
+    var invZoom = 1 / zoom;
+
 
     // Styling overall
     //-------------------------------------------------------------------------
@@ -459,24 +467,31 @@ document.addEventListener("DOMContentLoaded", function() {
     close.style.position = 'absolute';
     close.style.top = 0;
     close.style.right = 0;
+    close.style.transform = 'scale(' + invZoom + ')';
+    close.style.transformOrigin = 'top right';
 
     // Styling caption
     //-------------------------------------------------------------------------
-    // Styled in CSS
+    // We set the inverse zoom on the caption so it can be used in CSS
+    caption.style.setProperty('--inv-zoom', invZoom);
 
     // Styling prev/next buttons
     //-------------------------------------------------------------------------
     if (prev) {
       prev.style.position = 'absolute';
       prev.style.top = '50%';
-      prev.style.left = '20px';
-      prev.style.marginTop = '-20px'; // Approx center adjustment
+      prev.style.left = (20 * invZoom) + 'px';
+      prev.style.transform = 'scale(' + invZoom + ') translateY(-50%)';
+      prev.style.transformOrigin = 'left center';
+      prev.style.marginTop = 0;
     }
     if (next) {
       next.style.position = 'absolute';
       next.style.top = '50%';
-      next.style.right = '20px';
-      next.style.marginTop = '-20px';
+      next.style.right = (20 * invZoom) + 'px';
+      next.style.transform = 'scale(' + invZoom + ') translateY(-50%)';
+      next.style.transformOrigin = 'right center';
+      next.style.marginTop = 0;
     }
   }
 
