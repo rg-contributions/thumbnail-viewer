@@ -11,6 +11,9 @@
 			<label style="margin-left: 20px;">
 				<input type="checkbox" id="fit-to-screen-toggle" onchange="toggleFitToScreen(this.checked)"> Fit to Screen
 			</label>
+			<label style="margin-left: 20px;">
+				<input type="checkbox" id="name-under-thumbs-toggle" checked> Names under thumbs
+			</label>
 		</div>
 		<script>
 			function toggleFitToScreen(value) {
@@ -20,8 +23,24 @@
 				window.fitToScreen = value;
 			}
 
-			// Initial state for truncation demo
+			// Initial state for truncation and name display demos
 			window.truncate_names = false;
+			window.name_under_thumbs = false;
+
+			document.addEventListener("DOMContentLoaded", function() {
+				var nutToggle = document.getElementById('name-under-thumbs-toggle');
+				if (nutToggle) {
+					nutToggle.checked = window.name_under_thumbs;
+
+					nutToggle.addEventListener('change', function() {
+						window.name_under_thumbs = nutToggle.checked;
+						// Note: In this simple demo, we don't reload the page as it would 
+						// reset the window.name_under_thumbs variable back to the default true.
+						// In a real application, this variable would be set before the viewer runs.
+						alert("In this demo, window.name_under_thumbs is now " + window.name_under_thumbs + ". Refresh the page to see it reset, or imagine it was set to false by the system.");
+					});
+				}
+			});
 
 			function changeTheme(theme) {
 				document.getElementById('theme-link').href = theme;

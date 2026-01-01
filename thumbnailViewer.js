@@ -42,22 +42,42 @@ document.addEventListener("DOMContentLoaded", function() {
     label.innerHTML = name;
     label.title = name; // Show full name on hover
 
-    label.style.textAlign = 'center';
-    label.style.fontSize = '12px';
-    label.style.marginTop = '5px';
-    label.style.wordBreak = 'break-all';
-    label.style.color = 'inherit';
+    var nameUnderThumbs = (typeof window.name_under_thumbs !== 'undefined') ? window.name_under_thumbs : true;
 
-    var truncateNames = (typeof window.truncate_names !== 'undefined') ? window.truncate_names : false;
-    if (truncateNames) {
-      label.style.overflow = 'hidden';
-      label.style.textOverflow = 'ellipsis';
-      label.style.whiteSpace = 'nowrap';
-      label.style.display = 'block';
-      label.style.maxWidth = '100px'; // Typical thumbnail width
-      label.style.margin = '5px auto 0 auto';
+    if (nameUnderThumbs) {
+      label.style.textAlign = 'center';
+      label.style.fontSize = '12px';
+      label.style.marginTop = '5px';
+      label.style.wordBreak = 'break-all';
+      label.style.color = 'inherit';
+
+      var truncateNames = (typeof window.truncate_names !== 'undefined') ? window.truncate_names : false;
+      if (truncateNames) {
+        label.style.overflow = 'hidden';
+        label.style.textOverflow = 'ellipsis';
+        label.style.whiteSpace = 'nowrap';
+        label.style.display = 'block';
+        label.style.maxWidth = '100px'; // Typical thumbnail width
+        label.style.margin = '5px auto 0 auto';
+      } else {
+        label.style.display = 'block'; // Keep centered
+      }
     } else {
-      label.style.display = 'block'; // Keep centered
+      // Show inside thumbnail boxes (bottom-center justified)
+      label.style.position = 'absolute';
+      label.style.bottom = '5px';
+      label.style.left = '5px';
+      label.style.right = '5px';
+      label.style.textAlign = 'center';
+      label.style.fontSize = '12px';
+      label.style.wordBreak = 'break-all';
+      label.style.color = '#fff';
+      label.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      label.style.padding = '2px';
+      label.style.boxSizing = 'border-box';
+      label.style.pointerEvents = 'none'; // Don't interfere with clicks
+
+      element.style.position = 'relative';
     }
 
     element.style.display = 'inline-block';
