@@ -156,6 +156,38 @@ document.addEventListener("DOMContentLoaded", function() {
     window.addEventListener('resize', reStyle);
     
     show(overall);
+
+    // Event handlers for navigation
+    function handleKeyDown(event) {
+      if (event.code === 'PageUp' || event.code === 'ArrowLeft') {
+        event.preventDefault();
+        if (index > 0) display(index - 1);
+      } else if (event.code === 'PageDown' || event.code === 'ArrowRight') {
+        event.preventDefault();
+        if (index < els.length - 1) display(index + 1);
+      }
+    }
+
+    function handleWheel(event) {
+      event.preventDefault();
+      if (event.deltaY > 0) {
+        // Wheel down -> Previous
+        if (index > 0) display(index - 1);
+      } else if (event.deltaY < 0) {
+        // Wheel up -> Next
+        if (index < els.length - 1) display(index + 1);
+      }
+    }
+
+    // Attach listeners
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('wheel', handleWheel, { passive: false });
+
+    // Store cleanup function
+    overall._cleanupNav = function() {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('wheel', handleWheel);
+    };
   }
 
   // Key event listener for 'F' key to toggle fitToScreen
@@ -412,7 +444,9 @@ document.addEventListener("DOMContentLoaded", function() {
    */
   function clearActiveElements() {
     for (var i = 0; i < activeElements.length; i++) {
-      document.body.removeChild(activeElements[i]);
+      var el = activeElements[i];
+      if (el._cleanupNav) el._cleanupNav();
+      document.body.removeChild(el);
     }
     activeElements = [];
     
