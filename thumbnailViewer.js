@@ -204,6 +204,9 @@ document.addEventListener("DOMContentLoaded", function() {
       } else if (event.code === 'PageDown' || event.code === 'ArrowRight') {
         event.preventDefault();
         if (index < els.length - 1) display(index + 1);
+      } else if (event.code === 'Escape') {
+        event.preventDefault();
+        clearActiveElements();
       }
     }
 
