@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", function() {
   var widthFactor = 0.8;
   var heightFactor = 0.8;
 
+  // If this is set to true, the expanded image will occupy the whole window area
+  var fitToScreen = (typeof window.fitToScreen !== 'undefined') ? window.fitToScreen : false;
+
   // By default, the images will be rendered in the middle of the screen, but
   // you can add an offset to shift it vertically using this value
   var topOffset = 1.0;
@@ -123,8 +126,13 @@ document.addEventListener("DOMContentLoaded", function() {
     var next    = getNext(index);
 
     function reStyle() {
+      // Re-read the fitToScreen value in case it changed
+      fitToScreen = (typeof window.fitToScreen !== 'undefined') ? window.fitToScreen : false;
       style(overall, figure, image, caption, close, prev, next);
     }
+    
+    // Explicitly export reStyle so external toggles can use it
+    window.thumbnailViewerReStyle = reStyle;
 
     // We mount the elements one inside the other, set their
     // display style as hidden (we still have to style them),
@@ -149,6 +157,24 @@ document.addEventListener("DOMContentLoaded", function() {
     
     show(overall);
   }
+
+  // Key event listener for 'F' key to toggle fitToScreen
+  document.addEventListener('keydown', function(event) {
+    if (event.code === 'KeyF') {
+      window.fitToScreen = !window.fitToScreen;
+      
+      // Update the demo checkbox if it exists
+      var toggle = document.getElementById('fit-to-screen-toggle');
+      if (toggle) {
+        toggle.checked = window.fitToScreen;
+      }
+
+      // If there's an active display, trigger a restyle
+      if (activeElements.length > 0 && typeof window.thumbnailViewerReStyle === 'function') {
+        window.thumbnailViewerReStyle();
+      }
+    }
+  });
 
 
   /**
@@ -309,11 +335,30 @@ document.addEventListener("DOMContentLoaded", function() {
     var maxImageWidth  = '';
     var maxImageHeight = '';
 
-    if (!isNaN(clientWidth)) {
-      image.style.maxWidth = (clientWidth * widthFactor) + 'px';
-    }
-    if (!isNaN(clientHeight)) {
-      image.style.maxHeight = (clientHeight * heightFactor) + 'px';
+    if (fitToScreen) {
+      // Leave space for caption and close button (approx 40px each)
+      // Total 80px vertical space reduction
+      var reservedHeight = 80;
+      var availableHeight = clientHeight - reservedHeight;
+      
+      image.style.width = '100%';
+      image.style.height = availableHeight + 'px';
+      image.style.maxWidth = '100%';
+      image.style.maxHeight = availableHeight + 'px';
+      image.style.objectFit = 'contain';
+      
+      // Ensure the container doesn't introduce extra scrolling if the image is large
+      figure.style.maxWidth = '100%';
+      figure.style.maxHeight = availableHeight + 'px';
+    } else {
+      image.style.width = '';
+      image.style.height = '';
+      if (!isNaN(clientWidth)) {
+        image.style.maxWidth = (clientWidth * widthFactor) + 'px';
+      }
+      if (!isNaN(clientHeight)) {
+        image.style.maxHeight = (clientHeight * heightFactor) + 'px';
+      }
     }
 
     clientImageWidth  = image.clientWidth;
@@ -324,6 +369,11 @@ document.addEventListener("DOMContentLoaded", function() {
     figure.style.margin = 0;
     figure.style.position = 'relative'; // Relative to flex container
     
+    // Shrink figure to match image dimensions for correct button alignment
+    figure.style.display = 'inline-block';
+    figure.style.width = 'auto';
+    figure.style.height = 'auto';
+
     // Apply topOffset if it's not 1.0
     if (topOffset !== 1.0) {
       var verticalShift = (clientHeight / 2) * (topOffset - 1.0);

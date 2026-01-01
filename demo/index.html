@@ -8,26 +8,36 @@
 		<div style="padding: 10px;">
 			<button onclick="changeTheme('light.css')">Light Mode</button>
 			<button onclick="changeTheme('dark.css')">Dark Mode</button>
+			<label style="margin-left: 20px;">
+				<input type="checkbox" id="fit-to-screen-toggle" onchange="toggleFitToScreen(this.checked)"> Fit to Screen
+			</label>
 		</div>
 		<script>
+			function toggleFitToScreen(value) {
+				// This is how we "imagine" the hidden parameter is set
+				// and how the script would access it if it were truly hidden.
+				// For the sake of this demo, we'll expose it as a global that the viewer can check.
+				window.fitToScreen = value;
+			}
+
 			function changeTheme(theme) {
 				document.getElementById('theme-link').href = theme;
 			}
 		</script>
 		<a href="img/1.jpg" class="thumbnail-viewer">
-			<img class="thumbnail" src="img/1.jpg" alt="Jumeirah Lake Towers">
+			<img class="thumbnail" alt="Jumeirah Lake Towers" src="img/1.jpg">
 		</a>
 		<a href="img/2.jpg" class="thumbnail-viewer">
-			<img class="thumbnail" src="img/2.jpg" alt="Palm Trees">
+			<img class="thumbnail" alt="Palm Trees" src="img/2.jpg">
 		</a>
 		<a href="img/3.jpg" class="thumbnail-viewer">
-			<img class="thumbnail" src="img/3.jpg" alt="Tiger">
+			<img class="thumbnail" alt="Tiger" src="img/3.jpg">
 		</a>
 		<a href="img/4.jpg" class="thumbnail-viewer">
-			<img class="thumbnail" src="img/4.jpg" alt="City">
+			<img class="thumbnail" alt="City" src="img/4.jpg">
 		</a>
 		<div class="directory-viewer" data-name="Summer Vacation">
-			<img class="thumbnail" src="img/1.jpg" alt="Folder">
+			<img class="thumbnail" alt="Folder" src="img/1.jpg">
 		</div>
 	</body>
 </html>
