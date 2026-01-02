@@ -423,8 +423,17 @@ document.addEventListener("DOMContentLoaded", function() {
       var reservedHeight = 80;
       var availableHeight = clientHeight - reservedHeight;
       
-      image.style.width = '100%';
-      image.style.height = availableHeight + 'px';
+      var imgRatio = (image.naturalWidth && image.naturalHeight) ? (image.naturalWidth / image.naturalHeight) : 0;
+      var screenRatio = (availableHeight > 0) ? (clientWidth / availableHeight) : 0;
+
+      if (imgRatio > screenRatio) {
+        image.style.width = '100%';
+        image.style.height = 'auto';
+      } else {
+        image.style.width = 'auto';
+        image.style.height = availableHeight + 'px';
+      }
+
       image.style.maxWidth = '100%';
       image.style.maxHeight = availableHeight + 'px';
       image.style.objectFit = 'contain';
