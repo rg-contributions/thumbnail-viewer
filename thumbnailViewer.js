@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Finding elements with the class thumbnail-viewer
   var els = document.getElementsByClassName('thumbnail-viewer');
   var dirs = document.getElementsByClassName('directory-viewer');
+  var files = document.getElementsByClassName('file-viewer');
 
   function addLabel(element, name) {
     var label = document.createElement('div');
@@ -139,6 +140,14 @@ document.addEventListener("DOMContentLoaded", function() {
       addLabel(d, dirName);
     }
     d.style.setProperty('display', window.show_folders ? 'inline-block' : 'none', 'important');
+  }
+
+  for (var k = 0; k < files.length; k++) {
+    var f = files[k];
+    var fileName = f.getAttribute('data-name');
+    if (fileName) {
+      addLabel(f, fileName);
+    }
   }
 
   // Keeping a list of the elements that are visible
