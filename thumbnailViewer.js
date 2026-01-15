@@ -44,6 +44,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var nameUnderThumbs = (typeof window.name_under_thumbs !== 'undefined') ? window.name_under_thumbs : true;
 
+    var truncateNames = (typeof window.truncate_names !== 'undefined') ? window.truncate_names : false;
+
     if (nameUnderThumbs) {
       label.style.textAlign = 'center';
       label.style.fontSize = '12px';
@@ -51,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function() {
       label.style.wordBreak = 'break-all';
       label.style.color = 'inherit';
 
-      var truncateNames = (typeof window.truncate_names !== 'undefined') ? window.truncate_names : false;
       if (truncateNames) {
         label.style.overflow = 'hidden';
         label.style.textOverflow = 'ellipsis';
@@ -76,6 +77,12 @@ document.addEventListener("DOMContentLoaded", function() {
       label.style.padding = '2px';
       label.style.boxSizing = 'border-box';
       label.style.pointerEvents = 'none'; // Don't interfere with clicks
+
+      if (truncateNames) {
+        label.style.overflow = 'hidden';
+        label.style.textOverflow = 'ellipsis';
+        label.style.whiteSpace = 'nowrap';
+      }
 
       element.style.position = 'relative';
     }
