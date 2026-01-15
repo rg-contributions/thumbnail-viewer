@@ -28,6 +28,9 @@ document.addEventListener("DOMContentLoaded", function() {
   // If this is set to true, the expanded image will occupy the whole window area
   var fitToScreen = (typeof window.fitToScreen !== 'undefined') ? window.fitToScreen : false;
 
+  // Controls whether filenames/labels are shown
+  window.show_filenames = (typeof window.show_filenames !== 'undefined') ? window.show_filenames : true;
+
   // By default, the images will be rendered in the middle of the screen, but
   // you can add an offset to shift it vertically using this value
   var topOffset = 1.0;
@@ -41,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
     label.className = 'thumbnail-viewer-label';
     label.innerHTML = name;
     label.title = name; // Show full name on hover
+    label.style.display = window.show_filenames ? '' : 'none';
 
     var nameUnderThumbs = (typeof window.name_under_thumbs !== 'undefined') ? window.name_under_thumbs : true;
 
@@ -241,8 +245,9 @@ document.addEventListener("DOMContentLoaded", function() {
     };
   }
 
-  // Key event listener for 'F' key to toggle fitToScreen
+  // Key event listener for toggles
   document.addEventListener('keydown', function(event) {
+    // 'F' key to toggle fitToScreen
     if (event.code === 'KeyF') {
       window.fitToScreen = !window.fitToScreen;
       
@@ -250,6 +255,23 @@ document.addEventListener("DOMContentLoaded", function() {
       var toggle = document.getElementById('fit-to-screen-toggle');
       if (toggle) {
         toggle.checked = window.fitToScreen;
+      }
+
+      // If there's an active display, trigger a restyle
+      if (activeElements.length > 0 && typeof window.thumbnailViewerReStyle === 'function') {
+        window.thumbnailViewerReStyle();
+      }
+    }
+
+    // 'Ctrl+H' to toggle filename visibility
+    if (event.ctrlKey && event.code === 'KeyH') {
+      event.preventDefault();
+      window.show_filenames = !window.show_filenames;
+
+      // Update all thumbnail labels
+      var labels = document.getElementsByClassName('thumbnail-viewer-label');
+      for (var i = 0; i < labels.length; i++) {
+        labels[i].style.display = window.show_filenames ? '' : 'none';
       }
 
       // If there's an active display, trigger a restyle
@@ -311,6 +333,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function getCaption(url, alt) {
     const e = document.createElement('figcaption');
     e.className = 'thumbnail-viewer-caption';
+    e.style.display = window.show_filenames ? '' : 'none';
     
     if (alt) {
       e.innerHTML = alt;
@@ -490,6 +513,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //-------------------------------------------------------------------------
     // We set the inverse zoom on the caption so it can be used in CSS
     caption.style.setProperty('--inv-zoom', invZoom);
+    caption.style.display = window.show_filenames ? '' : 'none';
 
     // Styling prev/next buttons
     //-------------------------------------------------------------------------
