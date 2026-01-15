@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", function() {
   // Controls whether filenames/labels are shown
   window.show_filenames = (typeof window.show_filenames !== 'undefined') ? window.show_filenames : true;
 
+  // Controls whether folders are shown
+  window.show_folders = (typeof window.show_folders !== 'undefined') ? window.show_folders : true;
+
   // By default, the images will be rendered in the middle of the screen, but
   // you can add an offset to shift it vertically using this value
   var topOffset = 1.0;
@@ -131,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (dirName) {
       addLabel(d, dirName);
     }
+    d.style.display = window.show_folders ? 'inline-block' : 'none';
   }
 
   // Keeping a list of the elements that are visible
@@ -277,6 +281,18 @@ document.addEventListener("DOMContentLoaded", function() {
       // If there's an active display, trigger a restyle
       if (activeElements.length > 0 && typeof window.thumbnailViewerReStyle === 'function') {
         window.thumbnailViewerReStyle();
+      }
+    }
+
+    // 'Ctrl+J' to toggle folder visibility
+    if (event.ctrlKey && event.code === 'KeyJ') {
+      event.preventDefault();
+      window.show_folders = !window.show_folders;
+
+      // Update all directory viewers
+      var dirs = document.getElementsByClassName('directory-viewer');
+      for (var i = 0; i < dirs.length; i++) {
+        dirs[i].style.display = window.show_folders ? 'inline-block' : 'none';
       }
     }
   });
