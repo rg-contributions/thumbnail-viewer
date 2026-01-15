@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function() {
     placeholder.style.fontFamily = 'Helvetica, Arial, sans-serif';
     placeholder.style.color = '#888';
     placeholder.style.fontSize = '24px';
-    document.body.appendChild(placeholder);
+    document.body.insertBefore(placeholder, document.body.firstChild);
     return;
   }
 
@@ -214,11 +214,11 @@ document.addEventListener("DOMContentLoaded", function() {
       if (event.ctrlKey) return;
       
       event.preventDefault();
-      if (event.deltaY > 0) {
-        // Wheel down -> Previous
+      if (event.deltaY < 0) {
+        // Wheel up -> Previous
         if (index > 0) display(index - 1);
-      } else if (event.deltaY < 0) {
-        // Wheel up -> Next
+      } else if (event.deltaY > 0) {
+        // Wheel down -> Next
         if (index < els.length - 1) display(index + 1);
       }
     }
