@@ -59,6 +59,10 @@ document.addEventListener("DOMContentLoaded", function() {
       label.style.marginTop = '5px';
       label.style.wordBreak = 'break-all';
       label.style.color = 'inherit';
+      label.style.width = '100%';
+      label.style.boxSizing = 'border-box';
+      label.style.padding = '0 5px';
+      label.style.left = '0';
 
       if (truncateNames) {
         label.style.overflow = 'hidden';
@@ -134,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (dirName) {
       addLabel(d, dirName);
     }
-    d.style.display = window.show_folders ? 'inline-block' : 'none';
+    d.style.setProperty('display', window.show_folders ? 'inline-block' : 'none', 'important');
   }
 
   // Keeping a list of the elements that are visible
@@ -284,15 +288,15 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
 
-    // 'Ctrl+J' to toggle folder visibility
-    if (event.ctrlKey && event.code === 'KeyJ') {
+    // 'Ctrl+G' to toggle folder visibility
+    if (event.ctrlKey && event.code === 'KeyG') {
       event.preventDefault();
       window.show_folders = !window.show_folders;
 
       // Update all directory viewers
       var dirs = document.getElementsByClassName('directory-viewer');
       for (var i = 0; i < dirs.length; i++) {
-        dirs[i].style.display = window.show_folders ? 'inline-block' : 'none';
+          dirs[i].style.setProperty('display', window.show_folders ? 'inline-block' : 'none', 'important');
       }
     }
   });
