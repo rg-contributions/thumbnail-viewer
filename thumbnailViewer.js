@@ -262,6 +262,28 @@ document.addEventListener("DOMContentLoaded", function() {
     };
   }
 
+  // Context menu listener to send message to WebView2 host
+  document.addEventListener('contextmenu', function(event) {
+    var target = event.target.closest('[data-name]');
+    if (target) {
+      event.preventDefault();
+      var fileName = target.getAttribute('data-name');
+      var basePath = window.basePath || '';
+      
+      // Ensure basePath ends with a separator if it's not empty
+      if (basePath && !basePath.endsWith('\\') && !basePath.endsWith('/')) {
+        // Use backslash if basePath seems to be a Windows path, otherwise slash
+        basePath += basePath.includes('\\') ? '\\' : '/';
+      }
+      
+      var fullPath = basePath + fileName;
+      
+      if (window.chrome && window.chrome.webview && typeof window.chrome.webview.postMessage === 'function') {
+        window.chrome.webview.postMessage("CMD_MENU|" + fullPath);
+      }
+    }
+  });
+
   // Key event listener for toggles
   document.addEventListener('keydown', function(event) {
     // 'F' key to toggle fitToScreen

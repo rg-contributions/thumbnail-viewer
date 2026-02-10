@@ -16,6 +16,17 @@
 			</label>
 		</div>
 		<script>
+			// Mock WebView2 for testing context menu integration
+			window.chrome = window.chrome || {};
+			window.chrome.webview = window.chrome.webview || {};
+			window.chrome.webview.postMessage = function(message) {
+				console.log("WebView2 Message Sent:", message);
+				alert("WebView2 Message Sent:\n" + message);
+			};
+
+			// Mock basePath
+			window.basePath = "C:\\Photos\\";
+
 			function toggleFitToScreen(value) {
 				// This is how we "imagine" the hidden parameter is set
 				// and how the script would access it if it were truly hidden.
@@ -46,16 +57,16 @@
 				document.getElementById('theme-link').href = theme;
 			}
 		</script>
-		<a href="img/1.jpg" class="thumbnail-viewer">
+		<a href="img/1.jpg" class="thumbnail-viewer" data-name="1.jpg">
 			<img class="thumbnail" alt="Jumeirah Lake Towers Large Long Filename.jpg" src="img/1.jpg">
 		</a>
-		<a href="img/2.jpg" class="thumbnail-viewer">
+		<a href="img/2.jpg" class="thumbnail-viewer" data-name="2.jpg">
 			<img class="thumbnail" alt="Palm Trees" src="img/2.jpg">
 		</a>
-		<a href="img/3.jpg" class="thumbnail-viewer">
+		<a href="img/3.jpg" class="thumbnail-viewer" data-name="3.jpg">
 			<img class="thumbnail" alt="Tiger" src="img/3.jpg">
 		</a>
-		<a href="img/4.jpg" class="thumbnail-viewer">
+		<a href="img/4.jpg" class="thumbnail-viewer" data-name="4.jpg">
 			<img class="thumbnail" alt="City" src="img/4.jpg">
 		</a>
 		<div class="directory-viewer" data-name="Summer Vacation 2026 Trip to Japan Photo Collection">
