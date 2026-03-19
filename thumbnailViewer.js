@@ -9,7 +9,6 @@
  * <div class="thumbnail-viewer-overall">
  *   <figure class="thumbnail-viewer-container">
  *     <img src="" alt="" class="thumbnail-viewer-image" />
- *     <a href="#" alt="Close image" class="thumbnail-viewer-close" />
  *   </figure>
  *   <a href="#" class="thumbnail-viewer-prev">Previous</a>
  *   <a href="#" class="thumbnail-viewer-next">Next</a>
@@ -188,14 +187,17 @@ document.addEventListener("DOMContentLoaded", function() {
     var figure  = getFigure();
     var image   = getImage(url, alt);
     var caption = getCaption(url, alt);
-    var close   = getClose();
     var prev    = getPrev(index);
     var next    = getNext(index);
+
+    image.addEventListener('click', function () {
+      clearActiveElements();
+    });
 
     function reStyle() {
       // Re-read the fitToScreen value in case it changed
       fitToScreen = (typeof window.fitToScreen !== 'undefined') ? window.fitToScreen : false;
-      style(overall, figure, image, caption, close, prev, next);
+      style(overall, figure, image, caption, prev, next);
     }
     
     // Explicitly export reStyle so external toggles can use it
@@ -207,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // that are being displayed (if any), put the new figure
     // in the list of visible elements, style it, and then
     // make it visible
-    mount(overall, figure, image, caption, close, prev, next);
+    mount(overall, figure, image, caption, prev, next);
     hide(overall);
     document.body.appendChild(overall);
     
@@ -401,19 +403,6 @@ document.addEventListener("DOMContentLoaded", function() {
    * Builds the <a> element for closing
    * @returns {Element}
    */
-  function getClose() {
-    const e = document.createElement('a');
-    e.className = 'thumbnail-viewer-close';
-    e.alt = 'Close image';
-    e.href = '#';
-    e.innerHTML = 'Close';
-    e.addEventListener('click', function (event) {
-      event.preventDefault();
-      clearActiveElements();
-    });
-    return e;
-  }
-
   function getPrev(index) {
     if (index > 0) {
       const e = document.createElement('a');
@@ -448,11 +437,10 @@ document.addEventListener("DOMContentLoaded", function() {
   /**
    * Mounts the elements
    */
-  function mount(overall, figure, image, caption, close, prev, next) {
+  function mount(overall, figure, image, caption, prev, next) {
     overall.appendChild(figure);
     figure.appendChild(image);
     figure.appendChild(caption);
-    figure.appendChild(close);
     if (prev) overall.appendChild(prev);
     if (next) overall.appendChild(next);
   }
@@ -461,7 +449,7 @@ document.addEventListener("DOMContentLoaded", function() {
   /**
    * Applies the essential styles to the elements
    */
-  function style(overall, figure, image, caption, close, prev, next) {
+  function style(overall, figure, image, caption, prev, next) {
     // Getting the current width and height of the browser
     var clientWidth  = window.innerWidth;
     var clientHeight = window.innerHeight;
@@ -499,9 +487,8 @@ document.addEventListener("DOMContentLoaded", function() {
     var maxImageHeight = '';
 
     if (fitToScreen) {
-      // Leave space for caption and close button (approx 40px each)
-      // Total 80px vertical space reduction
-      var reservedHeight = 80;
+      // Leave space for caption (approx 40px)
+      var reservedHeight = 40;
       var availableHeight = clientHeight - reservedHeight;
       
       var imgRatio = (image.naturalWidth && image.naturalHeight) ? (image.naturalWidth / image.naturalHeight) : 0;
@@ -551,14 +538,6 @@ document.addEventListener("DOMContentLoaded", function() {
       var verticalShift = (clientHeight / 2) * (topOffset - 1.0);
       figure.style.top = verticalShift + 'px';
     }
-
-    // Styling close button
-    //-------------------------------------------------------------------------
-    close.style.position = 'absolute';
-    close.style.top = 0;
-    close.style.right = 0;
-    close.style.transform = 'scale(' + invZoom + ')';
-    close.style.transformOrigin = 'top right';
 
     // Styling caption
     //-------------------------------------------------------------------------

@@ -52,7 +52,6 @@ When the user clicks on a link, the link action (redirection) will be consumed, 
 <div class="thumbnail-viewer-overall">
   <figure class="thumbnail-viewer-container">
     <img src="..." alt="..." class="thumbnail-viewer-image" />
-    <a href="#" alt="Close image" class="thumbnail-viewer-close" />
   </figure>
  </div>
  ```
@@ -62,26 +61,12 @@ You can use the classes indicated above for styling.
 Use the classes described in the Using section for styling:
 
 - *thumbnail-viewer-overall* - Occupies the whole window. If you give it a background, you can use it to dim the screen.
-- *thumbnail-viewer-figure* - Contains the image and the link to close the popup.
-- *thumbnail-viewer-image* - Image.
-- *thumbnail-viewer-close* - Button to close the popup.
-
-
+- *thumbnail-viewer-figure* - Contains the image and its caption.
+- *thumbnail-viewer-image* - Image. Click the enlarged image or the darkened backdrop to close the preview.
 This is my suggestion for styling (also used in the demo):
 ```
 .thumbnail-viewer-overall {
     background-color: rgba(0, 0, 0, 0.9);
     font-family: helvetica, arial, verdana;
-}
-.thumbnail-viewer-close {
-    background-color: rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    color: #ffffff;
-    font-size: 12px;
-    text-decoration: none;
-}
-.thumbnail-viewer-close:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-    text-decoration: underline;
 }
 ```
